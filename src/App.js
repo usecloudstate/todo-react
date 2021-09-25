@@ -1,8 +1,15 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import Form from "./components/Form";
 import FilterButton from "./components/FilterButton";
 import Todo from "./components/Todo";
 import { nanoid } from "nanoid";
+
+// 1. Import our client libraries
+import { CloudStateClient } from "@usecloudstate/react-core";
+import { AuthProvider, config } from "@usecloudstate/react-web";
+
+// 2. Initialize the client with your App Id
+const client = new CloudStateClient("nameless-rock-7KjF8UTj", config);
 
 
 function usePrevious(value) {
@@ -22,8 +29,8 @@ const FILTER_MAP = {
 const FILTER_NAMES = Object.keys(FILTER_MAP);
 
 function App(props) {
-  const [tasks, setTasks] = useState(props.tasks);
-  const [filter, setFilter] = useState('All');
+  const [tasks, setTasks] = client.hooks.useCloudState("user.tasks", props.tasks);
+  const [filter, setFilter] = client.hooks.useCloudState("user.filter", 'All');
 
   function toggleTaskCompleted(id) {
     const updatedTasks = tasks.map(task => {
@@ -100,6 +107,7 @@ function App(props) {
 
   return (
     <div className="todoapp stack-large">
+      <AuthProvider client={client} />
       <Form addTask={addTask} />
       <div className="filters btn-group stack-exception">
         {filterList}
