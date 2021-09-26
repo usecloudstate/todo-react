@@ -8,9 +8,11 @@ import { nanoid } from "nanoid";
 import { CloudStateClient } from "@usecloudstate/react-core";
 import { AuthProvider, config } from "@usecloudstate/react-web";
 
-// 2. Initialize the client with your App Id
-const client = new CloudStateClient("nameless-rock-7KjF8UTj", config);
+// Staging override
+config.host = "https://api-staging.usecloudstate.io"
 
+// 2. Initialize the client with your App Id
+const client = new CloudStateClient("lively-lake-loZwea7t", config);
 
 function usePrevious(value) {
   const ref = useRef();
